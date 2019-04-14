@@ -1,0 +1,318 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<conio.h> 
+int count,x,n,pt[20],bt[20];
+
+void display(int a,int b)
+{
+	for(x=0;x<n;x++)
+  	{
+  		if(a==pt[x])
+  		{
+  			printf("P[%d]\t|\t%d\t|\t%d\n",x+1,b+bt[x],b);
+		}
+	}
+}
+ 
+int main() 
+{ 
+  int pmax,pmin,m,i,j=0,y,z,k,p=0,q=0,r=0,t,u=0,temp,p1[20]={},p2[20]={},p3[20]={},pbt1[20]={},pbt2[20]={},pbt3[20]={};
+  int wt1[20]={},wt2[20]={},wt3[20]={},ed1[20]={},ed2[20]={},ed3[20]={}; 
+  float avg; 
+  printf("Enter Total Process:\t "); 
+  scanf("%d",&n); 
+  for(count=0;count<n;count++) 
+  { 
+    printf("Enter Priority and Burst Time for Process Process Number %d :",count+1); 
+    scanf("%d",&pt[count]); 
+    scanf("%d",&bt[count]); 
+  }
+  printf("\n\nProcess\t|Turnaround Time|Waiting Time\n\n");                                                                    
+  for(i=0;i<n;i++)
+  {
+  	z=z+bt[i];
+  }
+pmin=150;
+pmax=0;
+  for(count=0;count<n;count++)
+  {
+  	if(pt[count]<pmin)
+  	{
+  		pmin=pt[count];
+	}
+  }
+  for(count=0;count<n;count++)
+  {
+  	if(pt[count]>pmax)
+  	{
+  		pmax=pt[count];
+	}
+  }
+  avg=(pmax+pmin)/3.0;
+  for(count=0;count<n;count++)
+  {
+  	if(pt[count]<=avg)
+  	{
+  		p1[p]=pt[count];
+  		pbt1[p]=bt[count];
+  		p++;
+	}
+	else if(avg<pt[count]&&pt[count]<=(2*avg))
+	{
+		p2[q]=pt[count];
+		pbt2[q]=bt[count];
+		q++;
+	}
+	else if((2*avg)<pt[count]&&pt[count]<=pmax)
+	{
+		p3[r]=pt[count];
+		pbt3[r]=bt[count];
+		r++;
+	}
+  }
+  if(p>=q&&p>=r)
+  {
+  	t=p;
+  }
+  else if(q>=p&&q>=r)
+  {
+  	t=q;
+  }
+  else if(r>=q&&r>=q)
+  {
+  	t=r;
+  }
+  for(i=0;i<t;i++)
+  {
+  	for(j=i+1;j<t;j++)
+  	{
+  		if(p1[i]>p1[j])
+  		{
+  			temp=p1[i];
+  			p1[i]=p1[j];
+  			p1[j]=temp;
+  			temp=pbt1[i];
+  			pbt1[i]=pbt1[j];
+  			pbt1[j]=temp;
+  			
+		}
+		if(p2[i]>p2[j])
+  		{
+  			temp=p2[i];
+  			p2[i]=p2[j];
+  			p2[j]=temp;
+  			temp=pbt2[i];
+  			pbt2[i]=pbt2[j];
+  			pbt2[j]=temp;
+		}
+	}
+  }
+  i=0;
+  for(k=0;k<z;k++)
+  {
+	for(y=0;y<3;y++)
+  	{
+		m=0;
+		if(y==0)
+  		{
+  			u=0;
+  			count=0;
+			while(count<p+1)
+			{
+				if(pbt1[count]>4)
+				{
+					m=m+4;
+					if(m==10||m>10)
+					{
+						m=m-4;
+						pbt1[count]=pbt1[count]-(10-m);
+						wt1[count]=wt1[count]+i-ed1[count];
+						i=i+10-m;
+						ed1[count]=i;
+						break;
+					}
+					pbt1[count]=pbt1[count]-4;
+					wt1[count]=wt1[count]+i-ed1[count];
+					i=i+4;
+					ed1[count]=i;
+					u++;
+					count++;
+					if(u==p+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(pbt1[count]==4)
+				{
+					m=m+4;
+					if(m==10||m>10)
+					{
+						m=m-4;
+						pbt1[count]=pbt1[count]-(10-m);
+						wt1[count]=wt1[count]+i-ed1[count];
+						i=i+10-m;
+						ed1[count]=i;
+						break;
+					}
+					pbt1[count]=0;
+					wt1[count]=wt1[count]+i-ed1[count];
+					i=i+4;
+					ed1[count]=i;
+					u++;
+					count++;
+					if(u==p+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(0<pbt1[count]&&pbt1[count]<4)
+				{
+					m=m+pbt1[count];
+					if(m==10||m>10)
+					{
+						m=m-pbt1[count];
+						pbt1[count]=pbt1[count]-(10-m);
+						wt1[count]=wt1[count]+i-ed1[count];
+						i=i+10-m;
+						ed1[count]=i;
+						break;
+					}
+					wt1[count]=wt1[count]+i-ed1[count];
+					i=i+pbt1[count];
+					pbt1[count]=0;
+					ed1[count]=i;
+					u++;
+					count++;
+					if(u==p+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(pbt1[count]==0)
+				{
+					display(p1[count],wt1[count]);
+					pbt1[count]=-1;
+					u++;
+					count++;
+					if(u==p+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(pbt1[count]<0)
+				{
+					u++;
+					count++;
+					if(u==p+1&&m<10)
+					{
+						count=0;
+					}
+				}
+			}
+		}
+		else if(y==1)
+		{
+			u=0;
+			count=0;
+			while(count<q+1)
+			{
+				if(pbt2[count]==0)
+				{
+					display(p2[count],wt2[count]);
+					pbt2[count]=-1;
+					u++;
+					count++;
+					if(u==q+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(0<pbt2[count])
+				{
+					m=m+pbt2[count];
+					if(m==10||m>10)
+					{
+						m=m-pbt2[count];
+						pbt2[count]=pbt2[count]-(10-m);
+						wt2[count]=wt2[count]+i-ed2[count];
+						i=i+10-m;
+						ed2[count]=i;
+						break;
+					}
+					wt2[count]=wt2[count]+i-ed2[count];
+					i=i+pbt2[count];
+					pbt2[count]=0;
+					ed2[count]=i;
+					u++;
+					count++;
+					if(u==q+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(pbt2[count]<0)
+				{
+					u++;
+					count++;
+					if(u==q+1&&m<10)
+					{
+						count=0;
+					}
+				}
+			}
+		}
+		else if(y==2)
+		{
+			u=0;
+			count=0;
+			while(count<r+1)
+			{
+				if(pbt3[count]==0)
+				{
+					display(p3[count],wt3[count]);
+					pbt3[count]=-1;
+					u++;
+					count++;
+					if(u==r+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(0<pbt3[count])
+				{
+					m=m+pbt3[count];
+					if(m==10||m>10)
+					{
+						m=m-pbt3[count];
+						pbt3[count]=pbt3[count]-(10-m);
+						wt3[count]=wt3[count]+i-ed3[count];
+						i=i+10-m;
+						ed3[count]=i;
+						break;
+					}
+					wt3[count]=wt3[count]+i-ed3[count];
+					i=i+pbt3[count];
+					pbt3[count]=0;
+					ed3[count]=i;
+					u++;
+					count++;
+					if(u==r+1&&m<10)
+					{
+						count=0;
+					}
+				}
+				else if(pbt3[count]<0)
+				{
+					u++;
+					count++;
+					if(u==r+1&&m<10)
+					{
+						count=0;
+					}
+				}
+			}
+		}
+  	}
+  }
+  return 0;
+}
